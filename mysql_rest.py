@@ -2,7 +2,6 @@ import MySQLdb
 import web
 import json
 import auth
-import dec
 
 #Auth = auth.Authentication()
 
