@@ -1,8 +1,6 @@
 import MySQLdb
 import web
-import json
-import auth
-import dec
+
 db=MySQLdb.connect("localhost","root","","raj")
 c=db.cursor()
 
@@ -13,7 +11,6 @@ class Authentication (object):
 
     def check_user(self,*args):
         sql = "select * from users where id="+self.user+" and password='"+self.password+"'"
-        print(sql)
         try:            
             c.execute(sql)
             results = c.fetchall()
