@@ -3,8 +3,6 @@ import web
 import json
 import auth
 
-#Auth = auth.Authentication()
-
 db=MySQLdb.connect("localhost","root","","raj")
 c=db.cursor()
 
@@ -21,9 +19,7 @@ class users:
     @auth.Authentication
     def POST(self):
         data = json.loads(web.data())
-        print(data)
         sql = "insert into users(name,password,age) VALUES ('%s','%s', %d)" % (data["name"],data["password"], data["age"])
-        print(sql)
         try:            
             c.execute(sql)
             db.commit()
@@ -77,7 +73,7 @@ class get_user:
             print "Error: unable to fecth data"
             error = {'error':'unable to fecth data'}
             return error
-        
+
 if __name__ == "__main__":
     app.run()
     
