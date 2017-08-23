@@ -10,14 +10,31 @@ db=MySQLdb.connect("localhost","root","","raj")
 c=db.cursor()
 
 urls = (
-    '/users', 'list_users',     
-    '/create_user', 'create_user',
+    '/users', 'users',     
+    '/create_user', 'users',
     '/users/(.*)', 'get_user'
 )
 
 app = web.application(urls, globals())
 
-class list_users:
+class users:
+
+    @auth.Authentication
+    def POST(self):
+        data = json.loads(web.data())
+        print(data)
+        sql = "insert into users(name,password,age) VALUES ('%s','%s', %d)" % (data["name"],data["password"], data["age"])
+        print(sql)
+        try:            
+            c.execute(sql)
+            db.commit()
+            success = {'message':'New user added'}
+            return success
+        except:
+            print "Error: unable to insert data"
+            error = {'error':'unable to insert the data'}
+            return error 
+
     @auth.Authentication
     def GET(self):
         sql = "select * from users"
@@ -61,26 +78,7 @@ class get_user:
             print "Error: unable to fecth data"
             error = {'error':'unable to fecth data'}
             return error
-class create_user():
-    @auth.Authentication
-    def POST(self):
-        data = json.loads(web.data())
-        print(data)
-        sql = "insert into users(name,password,age) VALUES ('%s','%s', %d)" % (data["name"],data["password"], data["age"])
-        print(sql)
-        try:            
-            c.execute(sql)
-            db.commit()
-            success = {'message':'New user added'}
-            return success
-        except:
-            print "Error: unable to insert data"
-            error = {'error':'unable to insert the data'}
-            return error 
-
-
-	 
-
+        
 if __name__ == "__main__":
     app.run()
     
